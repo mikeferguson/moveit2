@@ -49,8 +49,15 @@ void StartScreen::onInit()
 
 void StartScreen::loadURDFFile(const std::filesystem::path& urdf_file_path, const std::string& xacro_args)
 {
-  urdf_config_->loadFromPath(urdf_file_path, xacro_args);
-  srdf_config_->updateRobotModel();
+  try
+  {
+    urdf_config_->loadFromPath(urdf_file_path, xacro_args);
+    srdf_config_->updateRobotModel();
+  }
+  catch (const std::runtime_error& e)
+  {
+    RCLCPP_WARN_STREAM(*logger_, e.what());
+  }
 }
 
 std::filesystem::path StartScreen::getURDFPath()
